@@ -1,0 +1,51 @@
+﻿<UserControl
+    x:Class="Stoper.View.BasicStopwatch"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Stoper.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:viewmodel="using:Stoper.ViewModel"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    <UserControl.Resources>
+        <viewmodel:StopWatchViewModel x:Name="viewModel"/>
+        <viewmodel:TimeNumberFormatConverter x:Name="timeNumberFormatConverter"/>
+        <viewmodel:BooleannotConverter x:Name="booleanNotConverter"/>
+        <viewmodel:BooleanVisibilityConverter x:Name="booleanVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid DataContext="{StaticResource ResourceKey=viewModel}">
+        <StackPanel>
+            <TextBlock>
+                <Run>Zmierzony czas: </Run>
+                <Run Text="{Binding Hours, Converter={StaticResource timeNumberFormatConverter}}"/>
+                <Run>:</Run>
+                <Run Text="{Binding Minutes,Converter={StaticResource timeNumberFormatConverter}, ConverterParameter=d2}"/>
+                <Run>:</Run>
+                <Run Text="{Binding Seconds, Converter={StaticResource timeNumberFormatConverter}}"/>
+            </TextBlock>
+            <TextBlock>
+                <Run>Czas okrążenia: </Run>
+                <Run Text="{Binding LapHours, Converter={StaticResource timeNumberFormatConverter}}"/>
+                <Run>:</Run>
+                <Run Text="{Binding LapMinutes, Converter={StaticResource timeNumberFormatConverter},ConverterLanguage=d2}"/>
+                <Run>:</Run>
+                <Run Text="{Binding LapSeconds, Converter={StaticResource timeNumberFormatConverter}}"/>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <Button Click="StartButton_Click" IsEnabled="{Binding Running, Converter={StaticResource booleanNotConverter}}" >
+                    <SymbolIcon x:Name="play" Symbol="Play"/>
+                </Button>
+                <Button Click="StopButton_Click" IsEnabled="{Binding Running}">
+                    <SymbolIcon x:Name="stop" Symbol="Stop"/>
+                </Button>
+                <Button Click="ResetButton_Click">
+                    <SymbolIcon x:Name="reset" Symbol="Refresh"/>
+                </Button>
+                <Button Click="LapButton_Click" IsEnabled="{Binding Running}">Okrążenie</Button>
+            </StackPanel>
+            <TextBlock Text="Stoper działa" Visibility="{Binding Running, Converter={StaticResource booleanVisibilityConverter}}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
